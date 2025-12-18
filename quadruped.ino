@@ -1,17 +1,27 @@
 #include <Wire.h>
 #include <Adafruit_PWMServoDriver.h>
+#include <Arduino.h>
+#include <math.h>
 
 Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
 
-#define SERVOMIN 110 // min pulse width microsec
-#define SERVOMAX 510   // max pulse width microsec
 
-#define FREQ 50 // servo frequency in Hz
+// servo consts
+constexpr uint16_t SERVOMIN = 110; // min pulse width microsec
+constexpr uint16_t SERVOMAX = 510;   // max pulse width microsec
+constexpr uint16_t FREQ = 50; // servo frequency in Hz
 
-uint8_t channel = 0; // driver channel
-int degrees = 90;
+// leg consts
+constexpr float LINK1_LENGTH = 7.7f;
+constexpr float LINK2_LENGTH = 11.5f;
 
+// leg state
+float footX = 0;
+float footY = 0;
 
+// servo map
+uint8_t hipChannel = 0; // driver channel
+uint8_t kneeChannel = 1;
 
 
 void setup() {
@@ -23,6 +33,9 @@ void setup() {
   delay(10);
 
 }
+
+
+
 
 
 void loop() {
