@@ -19,6 +19,7 @@ constexpr float LINK2_LENGTH = 11.5f;
 float footX = 0;
 float footY = 0;
 
+
 // servo map
 uint8_t hipChannel = 0; // driver channel
 uint8_t kneeChannel = 1;
@@ -34,6 +35,10 @@ void setup() {
 
 }
 
+uint16_t angleToPulse(float angle) {
+  float degrees = angle * 180.0 / M_PI;
+  return map(degrees, 0, 180, SERVOMIN, SERVOMAX);
+}
 
 
 
