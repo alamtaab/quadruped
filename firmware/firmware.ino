@@ -15,7 +15,7 @@ uint8_t hipChannel = 0;  // driver channel
 uint8_t kneeChannel = 1;
 
 // leg consts
-constexpr float LINK1_LENGTH = 7.7f;
+constexpr float LINK1_LENGTH = 8.0f;
 constexpr float LINK2_LENGTH = 11.5f;
 
 // leg state
