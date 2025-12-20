@@ -4,7 +4,7 @@
 #include <math.h>
 
 Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
-// int angle = 0;
+
 // servo consts
 constexpr uint16_t SERVOMIN = 140;  // min pulse width microsec
 constexpr uint16_t SERVOMAX = 560;  // max pulse width microsec
@@ -31,13 +31,14 @@ void setup() {
   Serial.println("Initialized. \n");
 
   pwm.begin();
-  pwm.setOscillatorFrequency(27000000);  // 25MHz internal clock
+  pwm.setOscillatorFrequency(27000000);  // 25MHz internal clock but ~27MHz actual reccomended by manufacturer
   pwm.setPWMFreq(FREQ);
 
   Serial.println("Initialized. \n");
 
   pwm.setPWM(hipChannel, 0, angleToPulse(90));
-  pwm.setPWM(kneeChannel, 0, angleToPulse(90));
+  pwm.setPWM(hipChannel, 0, degreesToPulse(90));
+  pwm.setPWM(kneeChannel, 0, degreesToPulse(90));
   setFootPosition(LINK1_LENGTH, LINK2_LENGTH);
   delay(10);
 }
