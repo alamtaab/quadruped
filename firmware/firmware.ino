@@ -6,8 +6,8 @@
 Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
 // int angle = 0;
 // servo consts
-constexpr uint16_t SERVOMIN = 110;  // min pulse width microsec
-constexpr uint16_t SERVOMAX = 510;  // max pulse width microsec
+constexpr uint16_t SERVOMIN = 140;  // min pulse width microsec
+constexpr uint16_t SERVOMAX = 560;  // max pulse width microsec
 constexpr uint8_t FREQ = 50;        // servo frequency in Hz
 
 // servo map
