@@ -36,7 +36,6 @@ void setup() {
 
   Serial.println("Initialized. \n");
 
-  pwm.setPWM(hipChannel, 0, angleToPulse(90));
   pwm.setPWM(hipChannel, 0, degreesToPulse(90));
   pwm.setPWM(kneeChannel, 0, degreesToPulse(90));
   setFootPosition(LINK1_LENGTH, LINK2_LENGTH);
@@ -51,25 +50,47 @@ uint16_t degreesToPulse(float angle) {
   return map(angle, 0, 180, SERVOMIN, SERVOMAX);
 }
 
+
+/*
+  leg kinematic frame:
+  origin: hip joint
+  +x axis horizontal
+  +y axis upward
+  angles ccw from +x
+
+  nb: servo coords don't match frame and joint specific dir./angle corrections are applied hwen mapping ik angles to servo angles
+*/
 void setFootPosition(float x, float y) {
-  y *= -1;
   float r2 = x * x + y * y;  //distance to end effector from origin
   float innerAngle = (r2 - LINK1_LENGTH * LINK1_LENGTH - LINK2_LENGTH * LINK2_LENGTH) / (2 * LINK1_LENGTH * LINK2_LENGTH);
 
-  if (innerAngle > 1.0f) innerAngle = 1.0f;
-  if (innerAngle < -1.0f) innerAngle = -1.0f;
+  innerAngle = constrain(innerAngle, -1.0f, 1.0f);
 
-  float jointAngle2 = -acos(innerAngle);                                                                                     // knee up link 2 angle from axis of link 1
-  float jointAngle1 = atan2(y, x) - atan2(LINK2_LENGTH * sin(jointAngle2), LINK1_LENGTH + LINK2_LENGTH * cos(jointAngle2));  //link 1 angle from positive x
+// knee angle (IK)
+  // 0 degs = leg fully extended, + = flexion
+  float kneeRadians = acos(innerAngle);      
+  
 
+  // hip angle (IK)                         
+  // angle of femur ccw from +X axis                                
+  float hipRadians = atan2(y, x) - atan2(LINK2_LENGTH * sin(kneeRadians), LINK1_LENGTH + LINK2_LENGTH * cos(kneeRadians));
 
-  pwm.setPWM(hipChannel, 0, angleToPulse(jointAngle1));
-  pwm.setPWM(kneeChannel, 0, angleToPulse(constrain(jointAngle2, 0.43633, 2.7925)));
+  float kneeDegrees = kneeRadians * 180.0 / M_PI;
+
+  // hip servo is mounted such that servo 90deg = leg pointing down
+  // + rotation is CW
+  // ik angle is sign inverted such that CCW -> CW
+
+  float hipDegrees = -hipRadians * 180.0f / M_PI;
+
+  kneeDegrees = constrain(kneeDegrees, 25, 160);
+  pwm.setPWM(hipChannel, 0, degreesToPulse(hipDegrees));
+  pwm.setPWM(kneeChannel, 0, degreesToPulse(kneeDegrees));
 
   Serial.print("Angle1: ");
-  Serial.print(jointAngle1);
+  Serial.print(hipDegrees);
   Serial.print(" Angle2: ");
-  Serial.println(jointAngle2);
+  Serial.println(kneeDegrees);
   Serial.print("X: ");
   Serial.print(x);
   Serial.print(" Y: ");
