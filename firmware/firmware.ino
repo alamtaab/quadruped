@@ -79,6 +79,18 @@ void setFootPosition(float x, float y) {
 void loop() {
 
 
+  if (Serial.available() > 0) {
+    String input = Serial.readStringUntil('\n');
+    input.trim();
+
+    int separator = input.indexOf(':');
+    if (separator > 0) {
+      String xStr = input.substring(0, separator);
+      String yStr = input.substring(separator + 1);
+      float x = xStr.toFloat();
+      float y = yStr.toFloat();
+      setFootPosition(x, y);
+    }
   }
 
 
