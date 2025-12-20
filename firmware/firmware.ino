@@ -35,19 +35,18 @@ void setup() {
   pwm.setPWMFreq(FREQ);
 
   Serial.println("Initialized. \n");
-  
+
   pwm.setPWM(hipChannel, 0, angleToPulse(90));
   pwm.setPWM(kneeChannel, 0, angleToPulse(90));
   setFootPosition(LINK1_LENGTH, LINK2_LENGTH);
   delay(10);
 }
 
-uint16_t angleToPulse(float angle) {
+uint16_t degreesToPulse(float angle) {
 
-  angle *= 180.0 / M_PI;
-  angle = constrain(angle, 25, 160);
+  angle = constrain(angle, 0, 180);
 
-  Serial.println(angle);
+  // Serial.println(angle);
   return map(angle, 0, 180, SERVOMIN, SERVOMAX);
 }
 
