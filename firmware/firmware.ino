@@ -4,7 +4,7 @@
 #include <math.h>
 
 Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
-int degrees = 0;
+// int angle = 0;
 // servo consts
 constexpr uint16_t SERVOMIN = 110;  // min pulse width microsec
 constexpr uint16_t SERVOMAX = 510;  // max pulse width microsec
@@ -43,8 +43,12 @@ void setup() {
 }
 
 uint16_t angleToPulse(float angle) {
-  float degrees = angle * 180.0 / M_PI;
-  return map(degrees, 0, 180, SERVOMIN, SERVOMAX);
+
+  angle *= 180.0 / M_PI;
+  angle = constrain(angle, 25, 160);
+
+  Serial.println(angle);
+  return map(angle, 0, 180, SERVOMIN, SERVOMAX);
 }
 
 void setFootPosition(float x, float y) {
@@ -60,32 +64,16 @@ void setFootPosition(float x, float y) {
 
   pwm.setPWM(hipChannel, 0, angleToPulse(jointAngle1));
   pwm.setPWM(kneeChannel, 0, angleToPulse(jointAngle2));
+
+  Serial.print("Angle1: ");   Serial.print(angle1);
+  Serial.print(" Angle2: ");  Serial.println(angle2);
+  Serial.print("X: ");        Serial.print(x);
+  Serial.print(" Y: ");       Serial.println(y);
 }
 
 void loop() {
 
-  // if (Serial.available()) {
-  //   String line = Serial.readStringUntil('\n');
-  //   float x, y;
-  //   if (sscanf(line.c_str(), "%f %f", & x, & y) == 2) {
-  //     setFootPosition(x, y);
-  //   }
-  // }
 
-
-
-
-  // uint16_t pulselen = map(degrees, 0, 180, SERVOMIN, SERVOMAX);
-  // pwm.setPWM(1, 0, pulselen);
-  if (Serial.available() > 0) {
-    float read = Serial.parseFloat();
-    //  degrees = read;
-    if (read != 0.0) setFootPosition(0, read);
-  }
-
-  // pwm.setPWM(hipChannel, 0, angleToPulse(1.57));
-  // pwm.setPWM(kneeChannel, 0, angleToPulse(1.57) );
-  // Serial.println("Test. \n");
 
 
   delay(10);
