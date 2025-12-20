@@ -31,7 +31,7 @@ void setup() {
   Serial.println("Initialized. \n");
 
   pwm.begin();
-  pwm.setOscillatorFrequency(25000000);  // 25MHz internal clock
+  pwm.setOscillatorFrequency(27000000);  // 25MHz internal clock
   pwm.setPWMFreq(FREQ);
 
   Serial.println("Initialized. \n");
