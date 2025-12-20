@@ -62,18 +62,24 @@ void setFootPosition(float x, float y) {
   float jointAngle2 = -acos(innerAngle);                                                                                     // knee up link 2 angle from axis of link 1
   float jointAngle1 = atan2(y, x) - atan2(LINK2_LENGTH * sin(jointAngle2), LINK1_LENGTH + LINK2_LENGTH * cos(jointAngle2));  //link 1 angle from positive x
 
-  pwm.setPWM(hipChannel, 0, angleToPulse(jointAngle1));
-  pwm.setPWM(kneeChannel, 0, angleToPulse(jointAngle2));
 
-  Serial.print("Angle1: ");   Serial.print(angle1);
-  Serial.print(" Angle2: ");  Serial.println(angle2);
-  Serial.print("X: ");        Serial.print(x);
-  Serial.print(" Y: ");       Serial.println(y);
+  pwm.setPWM(hipChannel, 0, angleToPulse(jointAngle1));
+  pwm.setPWM(kneeChannel, 0, angleToPulse(constrain(jointAngle2, 0.43633, 2.7925)));
+
+  Serial.print("Angle1: ");
+  Serial.print(jointAngle1);
+  Serial.print(" Angle2: ");
+  Serial.println(jointAngle2);
+  Serial.print("X: ");
+  Serial.print(x);
+  Serial.print(" Y: ");
+  Serial.println(y);
 }
 
 void loop() {
 
 
+  }
 
 
   delay(10);
