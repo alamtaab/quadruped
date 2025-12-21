@@ -1,17 +1,11 @@
 #pragma once
+#include <Adafruit_PWMServoDriver.h>
 #include <Arduino.h>
+#include <Joint.h>
 
 struct LegConfig {
-    uint8_t hipPin;
-    uint8_t kneePin;  // corresponding pwm driver pins
-    
-    uint16_t minPulse;
-    uint16_t maxPulse;  // maximum pulse widths in microseconds
-    
-    float minAngle;
-    float maxAngle;  // mechanical limits of joint
-    
-    float offsetAngle;
+    JointConfig hip; // joint 1
+    JointConfig knee; // joint 2
 
     float femurLength;  // link 1
     float tibiaLength;  // link 2
@@ -19,7 +13,7 @@ struct LegConfig {
 
 class Leg {
 public:
-    Leg(LegConfig config);
+    Leg(Adafruit_PWMServoDriver* driver, LegConfig config);
 
     void moveTo(float x, float y);
 
@@ -27,5 +21,7 @@ public:
 
 private:
     LegConfig _cfg;  // store settings in class
-    uint16_t degreesToPulse(float angle);
+
+    Joint _hip;
+    Joint _knee;
 };
