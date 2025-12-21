@@ -4,11 +4,17 @@
 struct LegConfig {
     uint8_t hipPin;
     uint8_t kneePin;  // corresponding pwm driver pins
+    
     uint16_t minPulse;
     uint16_t maxPulse;  // maximum pulse widths in microseconds
+    
     float minAngle;
     float maxAngle;  // mechanical limits of joint
+    
     float offsetAngle;
+
+    float femurLength;  // link 1
+    float tibiaLength;  // link 2
 };
 
 class Leg {
